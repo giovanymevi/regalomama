@@ -1,0 +1,679 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=yes"
+    />
+    <title>
+      Ana Teresa Díaz Cárdenas - Libro de Corazones | Nuestro Amor para Mamá
+    </title>
+    <!-- Fuentes y estilos base -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background:
+          linear-gradient(rgba(255, 240, 245, 0.7), rgba(255, 182, 193, 0.8)),
+          url("img/ana.jpeg");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        font-family: "Quicksand", sans-serif;
+        padding: 30px 20px 60px;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* Contenedor principal libro */
+      .book-wrapper {
+        max-width: 1100px;
+        width: 100%;
+        background: #ffffff;
+        border-radius: 48px 48px 48px 24px;
+        box-shadow:
+          0 25px 45px rgba(0, 0, 0, 0.2),
+          0 10px 20px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        position: relative;
+        z-index: 10;
+      }
+
+      #balloonCanvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 15; /* Flotan por encima de todo de forma sutil */
+      }
+
+      /* Header decorativo */
+      .book-header {
+        background: #f06292;
+        background-image: radial-gradient(
+          circle at 10% 20%,
+          rgba(255, 230, 200, 0.5) 2%,
+          transparent 2.5%
+        );
+        background-size: 28px 28px;
+        padding: 24px 32px 20px;
+        text-align: center;
+        border-bottom: 3px solid #f48fb1;
+      }
+
+      .book-header h1 {
+        font-family: "Playfair Display", serif;
+        font-size: 2.4rem;
+        color: #5a2e1a;
+        text-shadow: 1px 1px 0 #ffe0b5;
+        letter-spacing: 1px;
+      }
+
+      .book-header p {
+        font-size: 1.2rem;
+        color: #6b3c1f;
+        font-weight: 500;
+        background: rgba(255, 245, 225, 0.8);
+        display: inline-block;
+        padding: 8px 20px;
+        border-radius: 60px;
+        margin-top: 10px;
+        backdrop-filter: blur(2px);
+      }
+
+      /* Navegación de páginas */
+      .pages-container {
+        min-height: 560px;
+        position: relative;
+        background: #fffbf4;
+        padding: 25px 35px;
+      }
+
+      .page {
+        display: none;
+        animation: fadePage 0.4s ease-out;
+        min-height: 500px;
+      }
+
+      .page.active-page {
+        display: block;
+      }
+
+      @keyframes fadePage {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      /* Tarjetas de contenido */
+      .dedication-card {
+        background: #ffffffdd;
+        backdrop-filter: blur(4px);
+        border-radius: 32px;
+        padding: 20px 28px;
+        margin-bottom: 20px;
+        box-shadow: 0 5px 18px rgba(0, 0, 0, 0.05);
+        border: 1px solid #ffe1c6;
+        transition: all 0.2s;
+      }
+
+      .daughter-quote {
+        border-left: 8px solid #f3a683;
+        background: #fff9f0;
+      }
+
+      .quote-text {
+        font-size: 1.1rem;
+        line-height: 1.5;
+        color: #4d2f1b;
+        font-style: italic;
+        font-weight: 500;
+      }
+
+      .quote-author {
+        margin-top: 15px;
+        font-weight: 700;
+        color: #c56a3b;
+        display: flex;
+        justify-content: flex-end;
+        font-style: normal;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .flower-icon {
+        font-size: 1.2rem;
+      }
+
+      .greeting-image {
+        display: flex;
+        justify-content: center;
+        margin: 20px 0;
+      }
+
+      .greeting-image img {
+        max-width: 100%;
+        border-radius: 36px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        max-height: 320px; /* Ajuste de tamaño para resaltar la foto principal */
+        object-fit: cover;
+        width: auto;
+        border: 5px solid #ffffff;
+        outline: 2px solid #f06292;
+        background: #fff0f5;
+      }
+
+      /* Botones de navegación */
+      .nav-buttons {
+        display: flex;
+        justify-content: space-between;
+        padding: 15px 35px 30px;
+        background: #fff0f5;
+        border-top: 1px solid #ffc0cb;
+      }
+
+      .nav-btn {
+        background: #ffb6c1;
+        border: none;
+        font-family: "Quicksand", sans-serif;
+        font-size: 1.1rem;
+        font-weight: 600;
+        padding: 10px 24px;
+        border-radius: 60px;
+        color: #3e2a1f;
+        cursor: pointer;
+        transition: 0.2s;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .nav-btn i {
+        font-size: 1rem;
+      }
+
+      .nav-btn:hover {
+        background: #ff8da1;
+        color: white;
+        transform: scale(1.02);
+      }
+
+      .page-indicator {
+        font-weight: 600;
+        color: #ad1457;
+        background: #fce4ec;
+        padding: 6px 16px;
+        border-radius: 40px;
+        font-size: 0.9rem;
+      }
+
+      /* Flores decorativas */
+      .floral-bg {
+        position: relative;
+      }
+
+      footer {
+        text-align: center;
+        padding: 20px 0 15px;
+        background: #ffebee;
+        font-size: 0.85rem;
+        color: #ad1457;
+        border-top: 1px solid #ffc0cb;
+      }
+
+      @media (max-width: 680px) {
+        .book-wrapper {
+          border-radius: 32px;
+        }
+        .pages-container {
+          padding: 20px 18px;
+        }
+        .dedication-card {
+          padding: 16px 20px;
+        }
+        .book-header h1 {
+          font-size: 1.8rem;
+        }
+        .nav-btn {
+          padding: 6px 16px;
+          font-size: 0.9rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="balloonCanvas"></canvas>
+
+    <div class="book-wrapper">
+      <div class="book-header">
+        <h1>🌷 Para la princesa de la casa 🌷</h1>
+        <p>Ana Teresa Díaz Cárdenas · Nuestra luz infinita</p>
+        <div style="margin-top: 8px">
+          <i class="fas fa-crown" style="color: #d48d4b"></i>
+          <i class="fas fa-heart" style="color: #e65c4f"></i>
+          <i class="fas fa-feather-alt" style="color: #bd7a4a"></i>
+        </div>
+      </div>
+
+      <div class="pages-container" id="pagesContainer">
+        <!-- Página 1: Introducción y poema central -->
+        <div class="page active-page" id="page0">
+          <div class="greeting-image">
+            <img
+              src="img/ana.jpeg"
+              alt="Ana Teresa Díaz Cárdenas"
+              onerror="
+                this.src =
+                  'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?q=80&w=500'
+              "
+            />
+          </div>
+          <div class="dedication-card">
+            <p style="font-size: 1.3rem; font-weight: 600; color: #b2532e">
+              <i class="fas fa-seedling"></i> Nuestro hogar, tu corazón
+            </p>
+            <p style="margin-top: 12px; line-height: 1.6; color: #5a3e2b">
+              En el corazón de nuestro hogar, hay una fuerza invisible que lo
+              mantiene todo unido. <strong>Eres tú, Ana.</strong> Has cultivado
+              este jardín con una paciencia infinita y una ternura que no conoce
+              límites. Junto a Giovanny, comenzaste a escribir una historia que
+              hoy florece en cinco direcciones distintas, cada una con su propio
+              color y aroma, pero todas compartiendo las mismas raíces
+              profundas.
+            </p>
+          </div>
+          <div class="dedication-card daughter-quote">
+            <p class="quote-text">
+              “Eres el nexo, la maestra y la amiga incondicional que toda
+              familia sueña tener.”
+            </p>
+            <div class="quote-author">
+              <i class="fas fa-heart flower-icon"></i> Con todo nuestro amor
+            </div>
+          </div>
+        </div>
+
+        <!-- Página 2: Rosy + Gaby -->
+        <div class="page" id="page1">
+          <div class="greeting-image">
+            <img
+              src="img/ana.jpeg"
+              alt="Ana Teresa Díaz Cárdenas"
+              onerror="
+                this.src =
+                  'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?q=80&w=500'
+              "
+            />
+          </div>
+          <div class="dedication-card">
+            <p class="quote-text">
+              “Rosy siempre dice que eres su brújula. En los momentos de duda,
+              tu voz es la que le devuelve la calma y la claridad. Gracias por
+              enseñarme que la verdadera fuerza nace de la bondad y por ser el
+              ejemplo de mujer que aspiro a ser.”
+            </p>
+            <div class="quote-author">
+              <i class="fas fa-compass flower-icon"></i> Rosy, con admiración
+            </div>
+          </div>
+          <div class="dedication-card">
+            <p class="quote-text">
+              “Para Gaby, eres la risa que ilumina los días nublados. Gracias
+              por contagiarme tu alegría y por recordarme que, pase lo que pase,
+              siempre habrá un motivo para sonreír si estamos juntas.”
+            </p>
+            <div class="quote-author">
+              <i class="fas fa-laugh-squint flower-icon"></i> Gaby, con alegría
+            </div>
+          </div>
+        </div>
+
+        <!-- Página 3: Meredith (doble mención cariñosa) y Maria -->
+        <div class="page" id="page2">
+          <div class="greeting-image">
+            <img
+              src="img/ana.jpeg"
+              alt="Ana Teresa Díaz Cárdenas"
+              onerror="
+                this.src =
+                  'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?q=80&w=500'
+              "
+            />
+          </div>
+          <div class="dedication-card">
+            <p class="quote-text">
+              “Meredith ve en ti una artista del alma. Gracias por creer en mis
+              sueños antes de que yo misma lo hiciera. Tu apoyo es el lienzo
+              sobre el cual pinto mi vida.”
+            </p>
+            <div class="quote-author">
+              <i class="fas fa-palette flower-icon"></i> Meredith, con gratitud
+            </div>
+          </div>
+          <div class="dedication-card">
+            <p class="quote-text">
+              “Maria encuentra en tu presencia su refugio de paz. Tu serenidad
+              es mi puerto seguro, mamá. Gracias por escuchar mis silencios y
+              por darme los consejos más sabios con solo una mirada.”
+            </p>
+            <div class="quote-author">
+              <i class="fas fa-peace flower-icon"></i> Maria, con dulzura
+            </div>
+          </div>
+        </div>
+
+        <!-- Página 4: Angelina + Giovanny (el amor de su vida) -->
+        <div class="page" id="page3">
+          <div class="greeting-image">
+            <img
+              src="img/ana.jpeg"
+              alt="Ana Teresa Díaz Cárdenas"
+              onerror="
+                this.src =
+                  'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?q=80&w=500'
+              "
+            />
+          </div>
+          <div class="dedication-card">
+            <p class="quote-text">
+              “Mamá, gracias por tus besos que curan todo y por hacerme sentir
+              la niña más afortunada del mundo. Eres mi heroína de cuentos.
+              Prometo llevar siempre conmigo todo lo que me has enseñado.”
+            </p>
+            <div class="quote-author">
+              <i class="fas fa-star-of-life flower-icon"></i> Angelina, con
+              inocencia
+            </div>
+          </div>
+          <div class="dedication-card">
+            <p class="quote-text">
+              “Gracias por elegirme para caminar a tu lado, por ser mi mejor
+              amiga y la madre maravillosa que guía a nuestras hijas. Eres el
+              sol de mi existencia.”
+            </p>
+            <div class="quote-author">
+              <i class="fas fa-heart flower-icon"></i> Giovanny, tu compañero
+            </div>
+          </div>
+        </div>
+
+        <!-- Página 5: Tributo final, semillas y homenaje -->
+        <div class="page" id="page4">
+          <div class="greeting-image">
+            <img
+              src="img/ana.jpeg"
+              alt="Ana Teresa Díaz Cárdenas"
+              onerror="
+                this.src =
+                  'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?q=80&w=500'
+              "
+            />
+          </div>
+          <div class="dedication-card">
+            <p style="font-weight: bold; color: #904e26">
+              <i class="fas fa-tree"></i> Las semillas se han convertido en
+              árboles fuertes
+            </p>
+            <p style="margin-top: 8px">
+              El tiempo ha pasado, y las semillas que plantaste se han
+              convertido en árboles fuertes. Has visto a tus hijas crecer,
+              tropezar y levantarse, siempre estando ahí para ofrecerles tu
+              mano. Cada paso que dan es un reflejo de los valores que sembraste
+              en ellas con tanto esmero y dedicación.
+            </p>
+            <div
+              style="
+                margin: 20px 0 10px;
+                background: #fcead9;
+                border-radius: 28px;
+                padding: 16px;
+                text-align: center;
+              "
+            >
+              <i
+                class="fas fa-crown"
+                style="color: #d68d4a; font-size: 1.8rem"
+              ></i>
+              <p style="font-weight: 700; font-size: 1.25rem; margin: 8px 0">
+                Gracias, Mamá Ana, por ser nuestra luz.
+              </p>
+              <p>
+                Hoy te celebramos no solo por lo que haces, sino por lo que
+                eres: una mujer extraordinaria que ha convertido una casa en un
+                hogar y una familia en un equipo eterno.
+                <strong
+                  >¡Te queremos con todo nuestro corazón, hoy y siempre!</strong
+                >
+              </p>
+              <div>
+                <i class="fas fa-heart" style="color: #de6d5e"></i>
+                <i class="fas fa-heart" style="color: #f4a261"></i>
+                <i class="fas fa-heart" style="color: #e9c46a"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-buttons">
+        <button class="nav-btn" id="prevBtn">
+          <i class="fas fa-arrow-left"></i> Anterior
+        </button>
+        <span class="page-indicator" id="pageCounter">Página 1 / 5</span>
+        <button class="nav-btn" id="nextBtn">
+          Siguiente <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+      <footer>
+        🌸 Para Ana Teresa Díaz Cárdenas - Con el amor eterno de Rosy, Gaby,
+        Meredith, Maria y Angelina. 🌸 <br />
+        Giovanny & tus niñas · Día de la Madre, celebrando tu magia.
+      </footer>
+    </div>
+
+    <script>
+      // Control de páginas interactivas
+      const pages = document.querySelectorAll(".page");
+      const prevButton = document.getElementById("prevBtn");
+      const nextButton = document.getElementById("nextBtn");
+      const pageCounter = document.getElementById("pageCounter");
+      let currentPage = 0;
+      const totalPages = pages.length;
+      let confettiTriggered = false;
+
+      function updatePages() {
+        pages.forEach((page, index) => {
+          page.classList.toggle("active-page", index === currentPage);
+        });
+        pageCounter.innerText = `Página ${currentPage + 1} / ${totalPages}`;
+        prevButton.disabled = currentPage === 0;
+        nextButton.disabled = currentPage === totalPages - 1;
+        prevButton.style.opacity = currentPage === 0 ? "0.5" : "1";
+        nextButton.style.opacity = currentPage === totalPages - 1 ? "0.5" : "1";
+
+        if (currentPage === totalPages - 1) {
+          triggerSpecialEffect();
+        }
+      }
+
+      function triggerSpecialEffect() {
+        if (currentPage === totalPages - 1 && !confettiTriggered) {
+          confettiTriggered = true;
+          const petals = ["🌸", "🌼", "🌺", "🌹", "💐", "❤️", "✨"];
+          for (let i = 0; i < 20; i++) {
+            const petal = document.createElement("div");
+            petal.innerText = petals[Math.floor(Math.random() * petals.length)];
+            petal.style.position = "fixed";
+            petal.style.left = Math.random() * 100 + "%";
+            petal.style.top = "-20px";
+            petal.style.fontSize = 18 + Math.random() * 20 + "px";
+            petal.style.opacity = 0.8;
+            petal.style.pointerEvents = "none";
+            petal.style.zIndex = "999";
+            petal.style.transition = "transform 2s linear, opacity 2s";
+            document.body.appendChild(petal);
+            setTimeout(() => {
+              petal.style.transform = `translateY(${window.innerHeight + 40}px) rotate(${Math.random() * 360}deg)`;
+              petal.style.opacity = "0";
+            }, 30);
+            setTimeout(() => petal.remove(), 3000);
+          }
+          setTimeout(() => {
+            confettiTriggered = false;
+          }, 4000);
+        }
+      }
+
+      nextButton.onclick = () => {
+        if (currentPage < totalPages - 1) {
+          currentPage++;
+          updatePages();
+        }
+      };
+
+      prevButton.onclick = () => {
+        if (currentPage > 0) {
+          currentPage--;
+          updatePages();
+        }
+      };
+
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowLeft") prevButton.click();
+        if (e.key === "ArrowRight") nextButton.click();
+      });
+
+      updatePages();
+
+      // --- Lógica de los Globos de Corazones Flotantes ---
+      const canvas = document.getElementById("balloonCanvas");
+      const ctx = canvas.getContext("2d");
+      let balloons = [];
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+
+      window.addEventListener("resize", resizeCanvas);
+      resizeCanvas();
+
+      class HeartBalloon {
+        constructor() {
+          this.reset();
+        }
+        reset() {
+          this.x = Math.random() * canvas.width;
+          this.y = canvas.height + Math.random() * 500;
+          this.size = 8 + Math.random() * 12;
+          this.speed = 0.5 + Math.random() * 1.0;
+          this.drift = Math.random() * 0.8 - 0.4;
+          this.amplitude = 1 + Math.random() * 2;
+          this.angle = Math.random() * Math.PI * 2;
+          // Colores bonitos en gama rosa y fucsia
+          const colors = [
+            "#f06292",
+            "#ec407a",
+            "#e91e63",
+            "#f48fb1",
+            "#ff80ab",
+          ];
+          this.color = colors[Math.floor(Math.random() * colors.length)];
+          this.opacity = 0.2 + Math.random() * 0.3; // Sutil para no estorbar la lectura
+        }
+        draw() {
+          ctx.globalAlpha = this.opacity;
+          ctx.fillStyle = this.color;
+          ctx.beginPath();
+          const x = this.x + Math.sin(this.angle) * this.amplitude;
+          const y = this.y;
+          const s = this.size;
+
+          // Dibujo de la forma de corazón
+          ctx.moveTo(x, y);
+          ctx.bezierCurveTo(x, y - s / 2, x - s, y - s / 2, x - s, y + s / 4);
+          ctx.bezierCurveTo(x - s, y + s, x, y + s * 1.3, x, y + s * 1.6);
+          ctx.bezierCurveTo(x, y + s * 1.3, x + s, y + s, x + s, y + s / 4);
+          ctx.bezierCurveTo(x + s, y - s / 2, x, y - s / 2, x, y);
+          ctx.fill();
+
+          // Hilo del globo
+          ctx.strokeStyle = `rgba(255, 255, 255, ${this.opacity * 0.5})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(x, y + s * 1.6);
+          ctx.lineTo(x + this.drift * 10, y + s * 4);
+          ctx.stroke();
+        }
+        update() {
+          this.y -= this.speed;
+          this.x += this.drift;
+          this.angle += 0.02;
+          if (this.y < -this.size * 5) this.reset();
+        }
+      }
+
+      // Crear partículas iniciales
+      for (let i = 0; i < 25; i++) balloons.push(new HeartBalloon());
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        balloons.forEach((b) => {
+          b.update();
+          b.draw();
+        });
+        requestAnimationFrame(animate);
+      }
+      animate();
+    </script>
+
+    <!-- Pequeño estilo extra para que las imágenes no se rompan visualmente -->
+    <style>
+      .dedication-card {
+        transition: all 0.2s;
+      }
+      button:disabled {
+        cursor: default;
+        background-color: #fce4ec;
+        opacity: 0.5;
+      }
+      .nav-btn i {
+        pointer-events: none;
+      }
+      footer i,
+      footer {
+        letter-spacing: 1px;
+      }
+      .page {
+        background: #fffbf4;
+        border-radius: 24px;
+      }
+    </style>
+  </body>
+</html>
