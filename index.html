@@ -270,9 +270,18 @@
   <body>
     <canvas id="balloonCanvas"></canvas>
 
-    <audio id="bgMusic" loop>
+    <audio id="bgMusic" loop preload="auto">
       <source src="src/Rebozo_de_Seda.mp3" type="audio/mpeg" />
     </audio>
+
+    <button
+      id="musicToggle"
+      class="music-btn"
+      aria-label="Reproducir música"
+      type="button"
+    >
+      🎵 Reproducir música
+    </button>
 
     <div class="book-wrapper">
       <div class="book-header">
@@ -585,29 +594,57 @@
           if (audio.duration && !isNaN(audio.duration)) {
             audio.currentTime = Math.random() * audio.duration;
           }
-          
-          audio.play()
+
+          audio
+            .play()
             .then(() => {
               isPlaying = true;
               console.log("Música iniciada correctamente.");
             })
-            .catch(err => {
-              console.warn("El navegador bloqueó el audio, esperando nueva interacción.", err);
+            .catch((err) => {
+              console.warn(
+                "El navegador bloqueó el audio, esperando nueva interacción.",
+                err,
+              );
             });
         };
 
         if (audio.readyState >= 1) {
           reproducir();
         } else {
-          audio.addEventListener('loadedmetadata', reproducir, { once: true });
+          audio.play().catch((err) => {
+            console.warn(
+              "No se pudo reproducir de inmediato. Intenta pulsar el botón de música.",
+              err,
+            );
+          });
         }
       }
 
-      // Escuchar múltiples tipos de interacción para asegurar el inicio
-      ['click', 'touchstart', 'keydown', 'mousedown'].forEach(evento => {
+      function updateMusicButton() {
+        musicToggle.innerText = audio.paused
+          ? "🎵 Reproducir música"
+          : "⏸️ Pausa música";
+      }
+
+      const musicToggle = document.getElementById("musicToggle");
+      musicToggle.addEventListener("click", () => {
+        if (audio.paused) {
+          iniciarMusica();
+        } else {
+          audio.pause();
+          isPlaying = false;
+          updateMusicButton();
+        }
+      });
+
+      ["click", "touchstart", "keydown", "mousedown"].forEach((evento) => {
         document.addEventListener(evento, iniciarMusica, { once: true });
       });
 
+      audio.addEventListener("play", updateMusicButton);
+      audio.addEventListener("pause", updateMusicButton);
+      updateMusicButton();
       updatePages();
 
       // --- Lógica de los Globos de Corazones Flotantes ---
@@ -701,6 +738,28 @@
         cursor: default;
         background-color: #fce4ec;
         opacity: 0.5;
+      }
+      .music-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 20;
+        padding: 12px 18px;
+        border: none;
+        border-radius: 999px;
+        background: rgba(255, 182, 193, 0.95);
+        color: #4d2f1b;
+        font-size: 0.95rem;
+        font-weight: 700;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+        cursor: pointer;
+        transition:
+          transform 0.2s ease,
+          background 0.2s ease;
+      }
+      .music-btn:hover {
+        transform: translateY(-2px);
+        background: rgba(255, 140, 170, 0.98);
       }
       .nav-btn i {
         pointer-events: none;
