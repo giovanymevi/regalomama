@@ -270,6 +270,10 @@
   <body>
     <canvas id="balloonCanvas"></canvas>
 
+    <audio id="bgMusic" loop>
+      <source src="Rebozo_de_Seda.mp3" type="audio/mpeg" />
+    </audio>
+
     <div class="book-wrapper">
       <div class="book-header">
         <h1>🌷 Para la princesa de la casa 🌷</h1>
@@ -567,6 +571,41 @@
       window.addEventListener("keydown", (e) => {
         if (e.key === "ArrowLeft") prevButton.click();
         if (e.key === "ArrowRight") nextButton.click();
+      });
+
+      // --- Lógica de Música ---
+      const audio = document.getElementById("bgMusic");
+      let isPlaying = false;
+
+      function iniciarMusica() {
+        if (isPlaying) return;
+
+        const reproducir = () => {
+          // Si la duración es conocida, saltamos a un punto aleatorio
+          if (audio.duration && !isNaN(audio.duration)) {
+            audio.currentTime = Math.random() * audio.duration;
+          }
+          
+          audio.play()
+            .then(() => {
+              isPlaying = true;
+              console.log("Música iniciada correctamente.");
+            })
+            .catch(err => {
+              console.warn("El navegador bloqueó el audio, esperando nueva interacción.", err);
+            });
+        };
+
+        if (audio.readyState >= 1) {
+          reproducir();
+        } else {
+          audio.addEventListener('loadedmetadata', reproducir, { once: true });
+        }
+      }
+
+      // Escuchar múltiples tipos de interacción para asegurar el inicio
+      ['click', 'touchstart', 'keydown', 'mousedown'].forEach(evento => {
+        document.addEventListener(evento, iniciarMusica, { once: true });
       });
 
       updatePages();
